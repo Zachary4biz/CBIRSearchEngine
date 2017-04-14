@@ -1,0 +1,4 @@
+#Python On Mac
+*.pyc
+*.idea
+statics/upload_pics/
