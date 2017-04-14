@@ -23,7 +23,7 @@ class IndexImage:
         for imagePath in allImgaePath:
             imageID = imagePath[imagePath.rfind("/") + 1:]
             image = cv2.imread(imagePath)
-            features = self.cd.describe(image)
+            features = self.cd.describe_color(image)
             features = [str(f) for f in features]
             output.write("%s,%s\n" % (imageID,",".join(features)))
             counter += 1
@@ -37,7 +37,7 @@ class IndexImage:
         output = open(self.index,'a')
         imageID = imagePath[imagePath.rfind("/") + 1:]
         image = cv2.imread(imagePath)
-        features = self.cd.describe(image)
+        features = self.cd.describe_color(image)
         features = [str(f) for f in features]
         output.write("%s,%s\n" % (imageID,",".join(features)))
         output.close()

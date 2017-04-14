@@ -8,12 +8,14 @@ class ColorDescriptor:
     def __init__(self, bins):
         self.bins = bins
 
+    # 均衡化
     def histogram(self, image, mask):
         hist = cv2.calcHist([image], [0, 1, 2], mask, self.bins, [0, 180, 0, 256, 0, 256])
         hist = cv2.normalize(hist, hist).flatten()
         return hist
 
-    def describe(self, image):
+    # 使用颜色描述子
+    def describe_color(self, image):
         # 转换到HSV颜色空间
         image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         # features用来量化图像
@@ -42,7 +44,10 @@ class ColorDescriptor:
             # 获取每个部分的颜色直方图,并保存到features数组中
             hist = self.histogram(image, cornerMask)
             features.extend(hist)
-
-
-
         return features
+
+    # 使用纹理描述子(LBP)
+    def describe_texture(self, image):
+        # 建立LBP
+        
+        return image

@@ -116,7 +116,7 @@ def searchiamge():
             # 可以从CSV中拿最新的一个就是这个图的特征
             # 也可以再用Descriptor描述一遍
             img = cv2.imread(path)
-            features = cd.describe(img)
+            features = cd.describe_color(img)
             results = searcher.search(features)
             # 这个results里面存储的是 score和resultID
             # 保存一下所有的图片地址,返回过去
