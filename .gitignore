@@ -1,6 +1,3 @@
 #Python On Mac
 *.pyc
 *.idea
-statics/upload_pics/*.jpg
-statics/upload_pics/*.png
-statics/upload_pics/*.jpeg
