@@ -1,6 +1,9 @@
 #Python On Mac
 *.pyc
 *.idea
+*.jpg
+*.mp4
+*.png
 statics/upload_pics/*.jpg
 statics/upload_pics/*.png
 statics/upload_pics/*.jpeg

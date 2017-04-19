@@ -2,8 +2,8 @@
 
 import numpy as np
 import cv2
-
-
+import skimage
+from skimage.feature import local_binary_pattern as lbp
 class ColorDescriptor:
     def __init__(self, bins):
         self.bins = bins
@@ -48,6 +48,18 @@ class ColorDescriptor:
 
     # 使用纹理描述子(LBP)
     def describe_texture(self, image):
+        # LBP参数
+        radius = 3
+        n_points = 8 * radius
         # 建立LBP
-        
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        lbp_image = lbp(image,n_points,radius)
+        cv2.imwrite("statics/indexOfImage/test.jpg",lbp_image)
         return image
+
+
+if __name__ == '__main__':
+    cd = ColorDescriptor((8,12,3))
+    image = cv2.imread("/Users/zac/Desktop/temp.jpg")
+    cd.describe_texture(image)
+    print "done"

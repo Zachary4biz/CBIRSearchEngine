@@ -8,6 +8,7 @@ import cv2
 import json
 import sys
 import time
+import skimage
 
 from ColorDescriptor import ColorDescriptor
 from IndexImage import IndexImage
@@ -70,12 +71,17 @@ def controller(params):
 def showImage(image_name):
     img = open(uploadImagePath+image_name,'rb')
     resp = Response(img,mimetype="image/jpeg")
+    resp.headers.add('Content-Length',str(os.path.getsize(uploadImagePath+image_name)))
     return resp
 
 @app.route('/image/<image_name>')
 def image(image_name):
+
     img = open(uploadImagePath+image_name,'rb')
-    resp = Response(img,mimetype="image/jpeg")
+    if image_name == "000TestVidep.mp4":
+        resp = Response(img,mimetype="video/mp4")
+    else:
+        resp = Response(img,mimetype="application/octet-stream")
     return resp
 
 # 静态路由
