@@ -35,6 +35,8 @@ class Searcher:
 
     # queryFeatures -- 目标图像(提交的图像)的特征
     # limit --  限定返回图像的个数 (默认为10个)
+    # 返回的result如下:
+    # [(1.2541891457949072e-12, 'UNADJUSTEDNONRAW_thumb_1e.jpg'), ...]
     def search(self, queryFeatures, limit=10):
         results = {}
         with open(self.indexPath) as f:
@@ -50,6 +52,6 @@ class Searcher:
         # 根据distance排个序,越相似的就在前面
         results = sorted([(v, k)
                           for (k, v) in results.items()])
+        print "results is \n",results
         return results[:limit]
-
 

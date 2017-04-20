@@ -26,6 +26,8 @@ class IndexImage:
             features = self.cd.describe_color(image)
             features = [str(f) for f in features]
             output.write("%s,%s\n" % (imageID,",".join(features)))
+
+            # 控制台输出进度
             counter += 1
             sys.stdout.write("\r%d/%d"%(counter,len(allImgaePath)))
             sys.stdout.flush()

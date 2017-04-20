@@ -106,7 +106,7 @@ def uploaddataset():
         return "visiting uploaddataset with GET"
 
 @app.route('/searchimage',methods=['GET','POST'])
-def searchiamge():
+def searchimage():
     if request.method == 'POST':
         print "POST进入serachimage"
         # 获取上传的图片并预处理文件名
