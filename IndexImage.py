@@ -23,7 +23,14 @@ class IndexImage:
         for imagePath in allImgaePath:
             imageID = imagePath[imagePath.rfind("/") + 1:]
             image = cv2.imread(imagePath)
-            features = self.cd.describe_color(image)
+            features=[]
+            try:
+                features_color = self.cd.describe_color(image)
+                features.extend(features_color)
+                # features_texture = self.cd.describe_texture(image)
+                # features.extend(features_texture)
+            except:
+                print "出错",imagePath
             features = [str(f) for f in features]
             output.write("%s,%s\n" % (imageID,",".join(features)))
 
@@ -40,6 +47,8 @@ class IndexImage:
         imageID = imagePath[imagePath.rfind("/") + 1:]
         image = cv2.imread(imagePath)
         features = self.cd.describe_color(image)
+        # features_texture = self.cdescribe_texture
         features = [str(f) for f in features]
+
         output.write("%s,%s\n" % (imageID,",".join(features)))
         output.close()

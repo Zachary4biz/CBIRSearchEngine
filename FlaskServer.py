@@ -23,24 +23,27 @@ searcher = Searcher(indexPath)
 
 
 def saveImage(uploaded_img,path):
-    print "保存到本地"
     filename = os.path.basename(uploaded_img.filename)
     name,ext=os.path.splitext(filename)
     ext = ext.lower()
     standard_type = ('.png', '.jpg', '.bmp', '.jpeg')
     if ext not in standard_type:
-        print "图片格式错误"
+        print "图片格式错误",filename
         return 0
     else:
         # 检查图片格式、保存到本地(服务器)
+        # print "开始保存"
         f_out = open(path, 'wb')
         uploaded_image_buffer = uploaded_img.read()
         f_out.write(uploaded_image_buffer)
         f_out.close()
-
+        sys.stdout.write("文件写入完毕\n")
+        sys.stdout.flush()
         #保存完了顺便建立索引
         index.addIndexForImage(path)
-        print "图片顺利保存并建立索引"
+        sys.stdout.write("文件建立索引完毕\n>>>>>\n")
+        sys.stdout.flush()
+        # print "图片顺利建立索引"
         return 1
 
 # 创建Flask实例
@@ -69,6 +72,14 @@ def controller(params):
 # 动态路由返回图片用
 @app.route('/statics/upload_pics/<image_name>')
 def showImage(image_name):
+    img = open(uploadImagePath+image_name,'rb')
+    resp = Response(img,mimetype="image/jpeg")
+    resp.headers.add('Content-Length',str(os.path.getsize(uploadImagePath+image_name)))
+    return resp
+
+# 为了方便POSTMAN
+@app.route('/upload_pics/<image_name>')
+def showImageForPostMan(image_name):
     img = open(uploadImagePath+image_name,'rb')
     resp = Response(img,mimetype="image/jpeg")
     resp.headers.add('Content-Length',str(os.path.getsize(uploadImagePath+image_name)))
@@ -126,18 +137,43 @@ def searchimage():
             results = searcher.search(features)
             # 这个results里面存储的是 score和resultID
             # 保存一下所有的图片地址,返回过去
+            # 检查一下,如果得分太低了就是没有相似图片
             resultImgPath = []
             for(score,resultID) in results:
                 # print resultID
                 resultImgPath.append(uploadImagePath+resultID)
-            print "search的结果是:"
-            print resultImgPath
-            return json.dumps(resultImgPath)
+            cvSaveSimilarImg(resultImgPath)
+            if results[0][0]>2:
+                print "无相似结果"
+
+                return "no match"
+            else:
+                resultImgPath = []
+                for(score,resultID) in results:
+                    # print resultID
+                    resultImgPath.append(uploadImagePath+resultID)
+                print "search的结果是:"
+                print resultImgPath
+                return json.dumps(resultImgPath)
         else:
             print "wrong format"
             return "wrong format"
     else:
         return "visiting searchiamge with GET"
+
+
+def cvSaveSimilarImg(path_list):
+    count = 0
+    for item in os.listdir("statics/indexOfImage/resultTmp/"):
+        itemPath = os.path.join("statics/indexOfImage/resultTmp/",item)
+        os.remove(itemPath)
+    for path in path_list:
+        count += 1
+        image = cv2.imread(path)
+        savePath = "statics/indexOfImage/resultTmp/%s.jpg"%count
+        cv2.imwrite(savePath,image)
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

@@ -42,9 +42,13 @@ class Searcher:
         with open(self.indexPath) as f:
             # 初始化 CSV reader
             reader = csv.reader(f)
+            features = []
             for row in reader:
-                features = [float(x)
-                            for x in row[1:]]
+                try:
+                    features.extend([float(x)
+                                    for x in row[1:]])
+                except:
+                    print row
                 d = self.distance(features, queryFeatures)
                 results[row[0]] = d
             f.close()
@@ -52,6 +56,7 @@ class Searcher:
         # 根据distance排个序,越相似的就在前面
         results = sorted([(v, k)
                           for (k, v) in results.items()])
+        results.pop(0)
         print "results is \n",results
         return results[:limit]
 

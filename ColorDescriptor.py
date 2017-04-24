@@ -63,8 +63,6 @@ class ColorDescriptor:
         cv2.ellipse(ellipMask, (cX, cY), (axesX, axesY), 0, 0, 360, 255, -1)
         # 获取中心椭圆的颜色直方图
         hist = self.histogram(image, ellipMask)
-        print "颜色直方图是(归一化)"
-        print hist
         features.extend(hist)
 
         # 把图像分割成除了中心椭圆的四个角
@@ -97,10 +95,10 @@ class ColorDescriptor:
         # print lbp_hist[0]
         # 发现lbp_hist比普通的hist要多一列其,lbp_hist[1]的内容是0~256,没必要,直接取它的[0]传去绘图就行了
         new_lbp_hist = lbp_hist[0]
-        print "numpy得到的lbp直方图是\n",new_lbp_hist
+        # print "numpy得到的lbp直方图是\n",new_lbp_hist
         # 归一化处理一下
         new_lbp_hist = cv2.normalize(new_lbp_hist,new_lbp_hist)
-        print "归一化之后的直方图是\n",new_lbp_hist
+        # print "归一化之后的直方图是\n",new_lbp_hist
 
 
         # histImg = drawHist(new_lbp_hist)
@@ -111,7 +109,7 @@ class ColorDescriptor:
         # lbpIMG = cv2.imread("/Users/zac/Desktop/original_IMG_lbp_r2.jpg")
         # histIMG = calcAndDrawHist(lbpIMG,[0,0,255])
         # cv2.imwrite("/Users/zac/Desktop/lbp_hist_flatten.jpg",histIMG)
-        return lbp_hist
+        return new_lbp_hist
 
 
 if __name__ == '__main__':
