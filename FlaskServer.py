@@ -23,13 +23,13 @@ searcher = Searcher(indexPath)
 
 
 def saveImage(uploaded_img,path):
-    print "保存到本地"
+    # print "保存到本地"
     filename = os.path.basename(uploaded_img.filename)
     name,ext=os.path.splitext(filename)
     ext = ext.lower()
     standard_type = ('.png', '.jpg', '.bmp', '.jpeg')
     if ext not in standard_type:
-        print "图片格式错误"
+        # print "图片格式错误"
         return 0
     else:
         # 检查图片格式、保存到本地(服务器)
@@ -40,7 +40,7 @@ def saveImage(uploaded_img,path):
 
         #保存完了顺便建立索引
         index.addIndexForImage(path)
-        print "图片顺利保存并建立索引"
+        # print "图片顺利保存并建立索引"
         return 1
 
 # 创建Flask实例
